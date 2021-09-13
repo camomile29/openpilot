@@ -280,7 +280,7 @@ class RoadSpeedLimiter:
         if self.longcontrol:
           sec = interp(v_diff, [2.7, 8.3], [15., 20.])
         else:
-          sec = interp(v_diff, [2.7, 8.3], [17., 23.])
+          sec = interp(v_diff, [2.7, 8.3], [19., 28.])
 
         if MIN_LIMIT <= cam_limit_speed <= MAX_LIMIT and (self.slowing_down or cam_limit_speed_left_dist < v_ego * sec):
 
