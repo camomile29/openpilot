@@ -111,7 +111,21 @@ DevicePanel::DevicePanel(QWidget* parent) : QWidget(parent) {
   reset_layout->setSpacing(30);
 
   // reset calibration button
-  QPushButton *reset_calib_btn = new QPushButton("Reset Calibration and LiveParameters");
+  QPushButton *restart_openpilot_btn = new QPushButton("Soft restart");
+  restart_openpilot_btn->setStyleSheet("height: 120px;border-radius: 15px;background-color: #393939;");
+  reset_layout->addWidget(restart_openpilot_btn);
+  QObject::connect(restart_openpilot_btn, &QPushButton::released, [=]() {
+    emit closeSettings();
+    QTimer::singleShot(1000, []() {
+      Params().putBool("SoftRestartTriggered", true);
+    });
+  });
+
+  main_layout->addWidget(horizontal_line());
+  main_layout->addLayout(reset_layout);
+
+  // reset calibration button
+  QPushButton *reset_calib_btn = new QPushButton("Reset Calibration");
   reset_calib_btn->setStyleSheet("height: 120px;border-radius: 15px;background-color: #393939;");
   reset_layout->addWidget(reset_calib_btn);
   QObject::connect(reset_calib_btn, &QPushButton::released, [=]() {
@@ -119,7 +133,7 @@ DevicePanel::DevicePanel(QWidget* parent) : QWidget(parent) {
       Params().remove("CalibrationParams");
       Params().remove("LiveParameters");
       QTimer::singleShot(1000, []() {
-        Hardware::reboot();
+        Params().putBool("SoftRestartTriggered", true);
       });
     }
   });
@@ -497,6 +511,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
   DevicePanel *device = new DevicePanel(this);
   QObject::connect(device, &DevicePanel::reviewTrainingGuide, this, &SettingsWindow::reviewTrainingGuide);
   QObject::connect(device, &DevicePanel::showDriverView, this, &SettingsWindow::showDriverView);
+  QObject::connect(device, &DevicePanel::closeSettings, this, &SettingsWindow::closeSettings);
 
   QList<QPair<QString, QWidget *>> panels = {
     {"Device", device},
