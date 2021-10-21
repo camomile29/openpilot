@@ -278,7 +278,7 @@ class RoadSpeedLimiter:
         v_diff = v_ego - v_limit
 
         if self.longcontrol:
-          sec = interp(v_diff, [2.7, 8.3], [15., 20.])
+          sec = interp(v_diff, [2.7, 8.3], [19., 28.])
         else:
           sec = interp(v_diff, [2.7, 8.3], [19., 28.])
 
