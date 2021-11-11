@@ -553,6 +553,15 @@ static void pigeon_publish_raw(PubMaster &pm, const std::string &dat) {
 }
 
 void pigeon_thread(Panda *panda) {
+
+  printf("panda->is_pigeon: %s !!!!!\n", panda->is_pigeon ? "true" : "false");
+  if(!panda->is_pigeon) {
+    puts("pigeon_thread canceled !!!!!");
+    return;
+  }
+
+  puts("pigeon_thread start !!!!!");
+
   PubMaster pm({"ubloxRaw"});
   bool ignition_last = false;
 
@@ -626,6 +635,8 @@ void pigeon_thread(Panda *panda) {
   }
 
   delete pigeon;
+
+  puts("pigeon_thread end !!!!!");
 }
 
 int main(int argc, char* argv[]) {

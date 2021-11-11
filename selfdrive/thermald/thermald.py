@@ -49,6 +49,8 @@ OFFROAD_DANGER_TEMP = 79.5 if TICI else 70.0
 
 prev_offroad_states: Dict[str, Tuple[bool, Optional[str]]] = {}
 
+LEON = False
+
 def read_tz(x):
   if x is None:
     return 0
@@ -70,25 +72,43 @@ def read_thermal(thermal_config):
 
 
 def setup_eon_fan():
+  global LEON
   os.system("echo 2 > /sys/module/dwc3_msm/parameters/otg_switch")
 
+  bus = SMBus(7, force=True)
+  try:
+    bus.write_byte_data(0x21, 0x10, 0xf)   # mask all interrupts
+    bus.write_byte_data(0x21, 0x03, 0x1)   # set drive current and global interrupt disable
+    bus.write_byte_data(0x21, 0x02, 0x2)   # needed?
+    bus.write_byte_data(0x21, 0x04, 0x4)   # manual override source
+  except IOError:
+    print("LEON detected")
+    LEON = True
+  bus.close()
 
 last_eon_fan_val = None
 def set_eon_fan(val):
-  global last_eon_fan_val
+  global LEON, last_eon_fan_val
 
   if last_eon_fan_val is None or last_eon_fan_val != val:
     bus = SMBus(7, force=True)
-    try:
-      i = [0x1, 0x3 | 0, 0x3 | 0x08, 0x3 | 0x10][val]
-      bus.write_i2c_block_data(0x3d, 0, [i])
-    except IOError:
+    if LEON:
+      try:
+        i = [0x1, 0x3 | 0, 0x3 | 0x08, 0x3 | 0x10][val]
+        bus.write_i2c_block_data(0x3d, 0, [i])
+      except IOError:
       # tusb320
-      if val == 0:
-        bus.write_i2c_block_data(0x67, 0xa, [0])
-      else:
-        bus.write_i2c_block_data(0x67, 0xa, [0x20])
-        bus.write_i2c_block_data(0x67, 0x8, [(val - 1) << 6])
+        if val == 0:
+          bus.write_i2c_block_data(0x67, 0xa, [0])
+          #bus.write_i2c_block_data(0x67, 0x45, [1<<2])
+        else:
+          #bus.write_i2c_block_data(0x67, 0x45, [0])
+          bus.write_i2c_block_data(0x67, 0xa, [0x20])
+          bus.write_i2c_block_data(0x67, 0x8, [(val - 1) << 6])
+    else:
+      bus.write_byte_data(0x21, 0x04, 0x2)
+      bus.write_byte_data(0x21, 0x03, (val*2)+1)
+      bus.write_byte_data(0x21, 0x04, 0x4)
     bus.close()
     last_eon_fan_val = val
 
@@ -184,6 +204,7 @@ def thermald_thread():
   in_car = False
   handle_fan = None
   is_uno = False
+  has_relay = False
   ui_running_prev = False
 
   params = Params()
@@ -240,6 +261,7 @@ def thermald_thread():
       # Setup fan handler on first connect to panda
       if handle_fan is None and peripheralState.pandaType != log.PandaState.PandaType.unknown:
         is_uno = peripheralState.pandaType == log.PandaState.PandaType.uno
+        has_relay = peripheralState.pandaType in [log.PandaState.PandaType.blackPanda, log.PandaState.PandaType.uno, log.PandaState.PandaType.dos]
 
         if TICI:
           cloudlog.info("Setting up TICI fan handler")
@@ -317,7 +339,7 @@ def thermald_thread():
       msg.deviceState.fanSpeedPercentDesired = fan_speed
 
     is_offroad_for_5_min = (started_ts is None) and ((not started_seen) or (off_ts is None) or (sec_since_boot() - off_ts > 60 * 5))
-    if is_offroad_for_5_min and max_comp_temp > OFFROAD_DANGER_TEMP:
+    if max_comp_temp > 105. or (has_relay and is_offroad_for_5_min and max_comp_temp > OFFROAD_DANGER_TEMP):
       # If device is offroad we want to cool down before going onroad
       # since going onroad increases load and can make temps go over 107
       thermal_status = ThermalStatus.danger
@@ -336,7 +358,7 @@ def thermald_thread():
 
     # show invalid date/time alert
     startup_conditions["time_valid"] = True #(now.year > 2020) or (now.year == 2020 and now.month >= 10)
-    set_offroad_alert_if_changed("Offroad_InvalidTime", (not startup_conditions["time_valid"]))
+    #set_offroad_alert_if_changed("Offroad_InvalidTime", (not startup_conditions["time_valid"]))
 
     # Show update prompt
     try:
@@ -416,14 +438,14 @@ def thermald_thread():
     msg.deviceState.carBatteryCapacityUwh = max(0, power_monitor.get_car_battery_capacity())
 
     # Check if we need to disable charging (handled by boardd)
-    msg.deviceState.chargingDisabled = power_monitor.should_disable_charging(startup_conditions["ignition"], in_car, off_ts)
+    #msg.deviceState.chargingDisabled = power_monitor.should_disable_charging(startup_conditions["ignition"], in_car, off_ts)
 
     # Check if we need to shut down
-    if power_monitor.should_shutdown(peripheralState, startup_conditions["ignition"], in_car, off_ts, started_seen):
-      cloudlog.info(f"shutting device down, offroad since {off_ts}")
+    #if power_monitor.should_shutdown(peripheralState, startup_conditions["ignition"], in_car, off_ts, started_seen):
+    #  cloudlog.info(f"shutting device down, offroad since {off_ts}")
       # TODO: add function for blocking cloudlog instead of sleep
-      time.sleep(10)
-      HARDWARE.shutdown()
+    #  time.sleep(10)
+    #  HARDWARE.shutdown()
 
     # If UI has crashed, set the brightness to reasonable non-zero value
     ui_running = "ui" in (p.name for p in sm["managerState"].processes if p.running)
@@ -449,16 +471,16 @@ def thermald_thread():
     startup_conditions_prev = startup_conditions.copy()
 
     # report to server once every 10 minutes
-    if (count % int(600. / DT_TRML)) == 0:
-      if EON and started_ts is None and msg.deviceState.memoryUsagePercent > 40:
-        cloudlog.event("High offroad memory usage", mem=msg.deviceState.memoryUsagePercent)
+    #if (count % int(600. / DT_TRML)) == 0:
+    #  if EON and started_ts is None and msg.deviceState.memoryUsagePercent > 40:
+    #    cloudlog.event("High offroad memory usage", mem=msg.deviceState.memoryUsagePercent)
 
-      cloudlog.event("STATUS_PACKET",
-                     count=count,
-                     pandaStates=(strip_deprecated_keys(pandaStates.to_dict()) if pandaStates else None),
-                     peripheralState=strip_deprecated_keys(peripheralState.to_dict()),
-                     location=(strip_deprecated_keys(sm["gpsLocationExternal"].to_dict()) if sm.alive["gpsLocationExternal"] else None),
-                     deviceState=strip_deprecated_keys(msg.to_dict()))
+    #  cloudlog.event("STATUS_PACKET",
+    #                 count=count,
+    #                 pandaStates=(strip_deprecated_keys(pandaStates.to_dict()) if pandaStates else None),
+    #                 peripheralState=strip_deprecated_keys(#peripheralState.to_dict()),
+    #                 location=(strip_deprecated_keys(sm["gpsLocationExternal"].to_dict()) if sm.alive["gpsLocationExternal"] else None),
+    #                 deviceState=strip_deprecated_keys(msg.to_dict()))
 
     count += 1
 

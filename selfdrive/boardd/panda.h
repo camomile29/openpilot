@@ -65,6 +65,7 @@ class Panda {
   std::atomic<bool> connected = true;
   std::atomic<bool> comms_healthy = true;
   cereal::PandaState::PandaType hw_type = cereal::PandaState::PandaType::UNKNOWN;
+  bool is_pigeon = false;
   bool has_rtc = false;
   const uint32_t bus_offset;
 

@@ -91,10 +91,12 @@ class Controls:
       self.log_sock = messaging.sub_sock('androidLog')
 
     # wait for one pandaState and one CAN packet
+    hw_type = self.sm['peripheralState'].pandaType
+    has_relay = hw_type in [PandaType.blackPanda, PandaType.uno, PandaType.dos]
     print("Waiting for CAN messages...")
     get_one_can(self.can_sock)
 
-    self.CI, self.CP = get_car(self.can_sock, self.pm.sock['sendcan'])
+    self.CI, self.CP = get_car(self.can_sock, self.pm.sock['sendcan'], has_relay)
 
     # read params
     self.is_metric = params.get_bool("IsMetric")
