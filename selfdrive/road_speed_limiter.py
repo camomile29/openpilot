@@ -13,7 +13,7 @@ from common.numpy_fast import interp, clip
 from common.realtime import sec_since_boot
 from selfdrive.config import Conversions as CV
 
-CAMERA_SPEED_FACTOR = 1.05
+CAMERA_SPEED_FACTOR = 1.1
 
 
 class Port:
@@ -298,9 +298,9 @@ class RoadSpeedLimiter:
         v_diff = v_ego - v_limit
         
         if self.longcontrol:
-          sec = interp(v_diff, [2.7, 8.3], [15., 20.])
+          sec = interp(v_diff, [2.7, 8.3], [19., 28.])
         else:
-          sec = interp(v_diff, [2.7, 8.3], [17., 23.])
+          sec = interp(v_diff, [2.7, 8.3], [19., 28.])
         
         if MIN_LIMIT <= cam_limit_speed <= MAX_LIMIT and (self.slowing_down or cam_limit_speed_left_dist < v_ego * sec):
           
