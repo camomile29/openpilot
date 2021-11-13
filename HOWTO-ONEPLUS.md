@@ -2,7 +2,8 @@
 ------
 1. 일단 /data 디렉토리에서 0.8.11 브렌치를 클론합니다.
 ```
-cd /data/ && mv openpilot openpilot-backup; git clone https://github.com/kans-ky/op810.git openpilot --branch op3t-Volt
+cd /data/ && mv openpilot openpilot-backup;
+git clone https://github.com/kans-ky/op810.git openpilot --branch opeplus-811-Hkg
 ```
 
 2. 아래 명령 실행합니다
