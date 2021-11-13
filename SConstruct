@@ -180,7 +180,6 @@ env = Environment(
     "-fPIC",
     "-O2",
     "-Werror",
-    "-Wshadow",
     "-Wno-implicit-function-declaration",
     "-Wno-unknown-warning-option",
     "-Wno-deprecated-register",
