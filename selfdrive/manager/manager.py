@@ -41,7 +41,7 @@ def manager_init():
     ("IsMetric", "1"),
 
     # HKG
-    ("UseClusterSpeed", "1"),
+    ("UseClusterSpeed", "0"),
     ("LongControlEnabled", "0"),
     ("MadModeEnabled", "1"),
     ("IsLdwsCar", "0"),
@@ -51,6 +51,7 @@ def manager_init():
     ("SccSmootherSlowOnCurves", "0"),
     ("SccSmootherSyncGasPressed", "0"),
     ("StockNaviDecelEnabled", "0"),
+    ("KeepSteeringTurnSignals", "0"),
     ("ShowDebugUI", "0"),
     ("DisableOpFcw", "0"),
     ("CustomLeadMark", "0"),
