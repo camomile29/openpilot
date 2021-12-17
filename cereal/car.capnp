@@ -309,14 +309,21 @@ struct CarControl {
   enabled @0 :Bool;
   active @7 :Bool;
 
+  # Actuator commands as computed by controlsd
   actuators @6 :Actuators;
+
+  # Any car specific rate limits or quirks applied by
+  # the CarController are reflected in actuatorsOutput
+  # and matches what is sent to the car
+  actuatorsOutput @10 :Actuators;
+
   roll @8 :Float32;
   pitch @9 :Float32;
 
   cruiseControl @4 :CruiseControl;
   hudControl @5 :HUDControl;
 
-  sccSmoother @10 :SccSmoother;
+  sccSmoother @11 :SccSmoother;
 
   struct SccSmoother {
     longControl @0:Bool;
@@ -335,12 +342,13 @@ struct CarControl {
 
   struct Actuators {
     # range from 0.0 - 1.0
-    gasDEPRECATED @0: Float32;
-    brakeDEPRECATED @1: Float32;
+    gas @0: Float32;
+    brake @1: Float32;
     # range from -1.0 - 1.0
     steer @2: Float32;
     steeringAngleDeg @3: Float32;
 
+    speed @6: Float32; # m/s
     accel @4: Float32; # m/s^2
     longControlState @5: LongControlState;
 
@@ -420,6 +428,7 @@ struct CarParams {
   enableDsu @5 :Bool;        # driving support unit
   enableApgs @6 :Bool;       # advanced parking guidance system
   enableBsm @56 :Bool;       # blind spot monitoring
+  flags @64 :UInt32;         # flags for car specific quirks
 
   minEnableSpeed @7 :Float32;
   minSteerSpeed @8 :Float32;
@@ -465,7 +474,6 @@ struct CarParams {
   steerRateCost @33 :Float32; # Lateral MPC cost on steering rate
   steerControlType @34 :SteerControlType;
   radarOffCan @35 :Bool; # True when radar objects aren't visible on CAN
-  minSpeedCan @51 :Float32; # Minimum vehicle speed from CAN (below this value drops to 0)
   stoppingDecelRate @52 :Float32; # m/s^2/s while trying to stop
   startingAccelRate @53 :Float32; # m/s^2/s while trying to start
 
@@ -490,13 +498,13 @@ struct CarParams {
     safetyParam @1 :Int16;
   }
   
-  mdpsBus @64: Int8;
-  sasBus @65: Int8;
-  sccBus @66: Int8;
-  enableAutoHold @67 :Bool;
-  hasScc13 @68 :Bool;
-  hasScc14 @69 :Bool;
-  hasEms @70 :Bool;
+  mdpsBus @65: Int8;
+  sasBus @66: Int8;
+  sccBus @67: Int8;
+  enableAutoHold @68 :Bool;
+  hasScc13 @69 :Bool;
+  hasScc14 @70 :Bool;
+  hasEms @71 :Bool;
 
   struct LateralParams {
     torqueBP @0 :List(Int32);
@@ -640,4 +648,5 @@ struct CarParams {
   safetyParamDEPRECATED @10 :Int16;
   safetyModelDEPRECATED @9 :SafetyModel;
   safetyModelPassiveDEPRECATED @42 :SafetyModel = silent;
+  minSpeedCanDEPRECATED @51 :Float32;
 }
