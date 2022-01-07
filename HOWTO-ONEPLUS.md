@@ -1,6 +1,7 @@
 원플(Oneplus 3t)에서 오픈파일럿 이식하려면?
 ------
 1. 일단 /data 디렉토리에서 0.8.9 브렌치를 설치해야 상위 버전으로 이동할 수 있습니다.
+(설치된 버전이 089이상이면 아래 6번부터 하시면 됩니다.)
 ```
 cd /data/ && mv openpilot openpilot-backup;
 git clone https://github.com/kans-ky/oneplus.git openpilot --branch 0.8.9-Volt
