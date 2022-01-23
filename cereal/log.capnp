@@ -846,6 +846,8 @@ struct LongitudinalPlan @0xe00b5b3eba12876c {
   speeds @33 :List(Float32);
   jerks @34 :List(Float32);
 
+  solverExecutionTime @35 :Float32;
+
   enum LongitudinalPlanSource {
     cruise @0;
     lead0 @1;
@@ -906,9 +908,11 @@ struct LateralPlan @0xe1e9318e2ae8b51e {
   psis @26 :List(Float32);
   curvatures @27 :List(Float32);
   curvatureRates @28 :List(Float32);
+
+  solverExecutionTime @30 :Float32;
   
-  autoLaneChangeEnabled @30 :Bool;
-  autoLaneChangeTimer @31 :Int8;
+  autoLaneChangeEnabled @31 :Bool;
+  autoLaneChangeTimer @32 :Int8;
 
   enum Desire {
     none @0;
@@ -1451,14 +1455,14 @@ struct NavRoute {
 }
 
 struct RoadLimitSpeed {
-    active @0 :UInt16;
-    roadLimitSpeed @1 :UInt16;
+    active @0 :Int16;
+    roadLimitSpeed @1 :Int16;
     isHighway @2 :Bool;
-    camType @3 :UInt16;
-    camLimitSpeedLeftDist @4 :UInt16;
-    camLimitSpeed @5 :UInt16;
-    sectionLimitSpeed @6 :UInt16;
-    sectionLeftDist @7 :UInt16;
+    camType @3 :Int16;
+    camLimitSpeedLeftDist @4 :Int16;
+    camLimitSpeed @5 :Int16;
+    sectionLimitSpeed @6 :Int16;
+    sectionLeftDist @7 :Int16;
     camSpeedFactor @8 :Float32;
 }
 

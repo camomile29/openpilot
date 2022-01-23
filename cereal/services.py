@@ -42,12 +42,12 @@ services = {
   "carControl": (True, 100., 10),
   "longitudinalPlan": (True, 20., 5),
   "procLog": (True, 0.5),
-  "gpsLocationExternal": (True, 10., 1),
+  "gpsLocationExternal": (True, 10., 10),
   "ubloxGnss": (True, 10.),
   "clocks": (True, 1., 1),
   "ubloxRaw": (True, 20.),
-  "liveLocationKalman": (True, 20., 2),
-  "liveParameters": (True, 20., 2),
+  "liveLocationKalman": (True, 20., 5),
+  "liveParameters": (True, 20., 5),
   "cameraOdometry": (True, 20., 5),
   "lateralPlan": (True, 20., 5),
   "thumbnail": (True, 0.2, 1),
@@ -66,6 +66,7 @@ services = {
   "navInstruction": (True, 0.),
   "navRoute": (True, 0.),
   "navThumbnail": (True, 0.),
+  "roadLimitSpeed": (False, 0.),
 
   # debug
   "testJoystick": (False, 0.),

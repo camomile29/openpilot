@@ -334,11 +334,7 @@ struct CarControl {
 
     logMessage @3 :Text;
 
-    roadLimitSpeedActive @4 :Int32;
-    roadLimitSpeed @5 :UInt32;
-    roadLimitSpeedLeftDist @6 :UInt32;
-
-    autoTrGap @7 :UInt32;
+    autoTrGap @4 :UInt32;
   }
 
   struct Actuators {
@@ -643,7 +639,7 @@ struct CarParams {
   }
 
   enableCameraDEPRECATED @4 :Bool;
-  isPandaBlackDEPRECATED @39: Bool;
+  isPandaBlackDEPRECATED @39 :Bool;
   hasStockCameraDEPRECATED @57 :Bool;
   safetyParamDEPRECATED @10 :Int16;
   safetyModelDEPRECATED @9 :SafetyModel;

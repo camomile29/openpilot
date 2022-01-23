@@ -116,6 +116,12 @@ class RoadLimitSpeedServer:
       except:
         pass
 
+  def send_sdp(self, sock):
+    try:
+      sock.sendto('EON:ROAD_LIMIT_SERVICE:v1'.encode(), (self.remote_addr[0], Port.BROADCAST_PORT))
+    except:
+      pass
+
   def udp_recv(self, sock):
     ret = False
     try:
@@ -128,6 +134,7 @@ class RoadLimitSpeedServer:
         if 'cmd' in json_obj:
           try:
             os.system(json_obj['cmd'])
+            ret = False
           except:
             pass
 
@@ -135,6 +142,7 @@ class RoadLimitSpeedServer:
           try:
             echo = json.dumps(json_obj["echo"])
             sock.sendto(echo.encode(), (self.remote_addr[0], Port.BROADCAST_PORT))
+            ret = False
           except:
             pass
 
@@ -221,6 +229,8 @@ def main():
           dat.roadLimitSpeed.camSpeedFactor = server.get_limit_val("cam_speed_factor", CAMERA_SPEED_FACTOR)
           roadLimitSpeed.send(dat.to_bytes())
 
+          server.send_sdp(sock)
+
         server.check()
 
     except Exception as e:
@@ -232,7 +242,6 @@ class RoadSpeedLimiter:
     self.slowing_down = False
     self.started_dist = 0
 
-    self.longcontrol = Params().get_bool('LongControlEnabled')
     self.sock = messaging.sub_sock("roadLimitSpeed")
     self.roadLimitSpeed = None
 
