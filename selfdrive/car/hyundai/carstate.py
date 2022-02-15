@@ -29,6 +29,7 @@ class CarState(CarStateBase):
     self.scc_bus = CP.sccBus
     self.has_scc13 = CP.hasScc13 or CP.carFingerprint in FEATURES["has_scc13"]
     self.has_scc14 = CP.hasScc14 or CP.carFingerprint in FEATURES["has_scc14"]
+    self.has_lfa_hda = CP.hasLfaHda
     self.leftBlinker = False
     self.rightBlinker = False
     self.cruise_main_button = 0
@@ -145,7 +146,6 @@ class CarState(CarStateBase):
 
     # TODO: Check this
     ret.brakeLights = bool(cp.vl["TCS13"]["BrakeLight"] or ret.brakePressed)
-
     ret.gasPressed = cp.vl["TCS13"]["DriverOverride"] == 1
 
     if self.CP.carFingerprint in EV_HYBRID_CAR:
@@ -193,6 +193,7 @@ class CarState(CarStateBase):
     self.scc11 = cp_scc.vl["SCC11"]
     self.scc12 = cp_scc.vl["SCC12"]
     self.mdps12 = cp_mdps.vl["MDPS12"]
+    self.lfahda_mfc = cp_cam.vl["LFAHDA_MFC"]
     self.park_brake = cp.vl["CGW1"]["CF_Gway_ParkBrakeSw"]
     self.steer_state = cp_mdps.vl["MDPS12"]["CF_Mdps_ToiActive"] #0 NOT ACTIVE, 1 ACTIVE
     self.cruise_unavail_cnt += 1 if cp.vl["TCS13"]["CF_VSM_Avail"] != 1 and cp.vl["TCS13"]["ACCEnable"] != 0 else -self.cruise_unavail_cnt
@@ -611,6 +612,16 @@ class CarState(CarStateBase):
         ("SCC11", 50),
         ("SCC12", 50),
       ]
+
+      if CP.hasLfaHda:
+        signals += [
+          ("HDA_USM", "LFAHDA_MFC"),
+          ("HDA_Active", "LFAHDA_MFC"),
+          ("HDA_Icon_State", "LFAHDA_MFC"),
+          ("HDA_LdwSysState", "LFAHDA_MFC"),
+          ("HDA_Icon_Wheel", "LFAHDA_MFC"),
+        ]
+        checks += [("LFAHDA_MFC", 20)]
 
     return CANParser(DBC[CP.carFingerprint]["pt"], signals, checks, 2, enforce_checks=False)
 
