@@ -180,6 +180,11 @@ class CarInterfaceBase(ABC):
         events.add(EventName.pcmEnable)
       elif not cs_out.cruiseState.enabled:
         events.add(EventName.pcmDisable)
+        
+    # auto engage when vEgo above 4.166667(15kmh)
+    if cs_out.cruiseState.enabled:
+      if cs_out.gearShifter == GearShifter.drive and cs_out.vEgo > 5. / 3.6:  #10 = 10km/h
+        events.add(EventName.pcmEnable)
 
     return events
 
