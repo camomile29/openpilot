@@ -50,6 +50,7 @@ OFFROAD_DANGER_TEMP = 79.5 if TICI else 70.0
 
 prev_offroad_states: Dict[str, Tuple[bool, Optional[str]]] = {}
 
+LEON = False
 tz_by_type: Optional[Dict[str, int]] = None
 def populate_tz_by_type():
   global tz_by_type
@@ -240,12 +241,14 @@ def thermald_thread(end_event, hw_queue):
       if fan_controller is None and peripheralState.pandaType != log.PandaState.PandaType.unknown:
         is_uno = peripheralState.pandaType == log.PandaState.PandaType.uno
 
-        if TICI:
-          fan_controller = TiciFanController()
-        elif is_uno or PC:
-          fan_controller = UnoFanController()
-        else:
-          fan_controller = EonFanController()
+        #if TICI:
+        #  fan_controller = TiciFanController()
+        #elif is_uno or PC:
+        #  fan_controller = UnoFanController()
+        #else:
+        #  fan_controller = EonFanController()
+
+    # neokii
     else:
       if sec_since_boot() - panda_state_ts > 3.:
         if onroad_conditions["ignition"]:
