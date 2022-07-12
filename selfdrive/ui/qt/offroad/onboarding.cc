@@ -76,7 +76,7 @@ void TermsPage::showEvent(QShowEvent *event) {
   main_layout->setContentsMargins(45, 35, 45, 45);
   main_layout->setSpacing(0);
 
-  QLabel *title = new QLabel("Terms & Conditions");
+  QLabel *title = new QLabel("이용약관");
   title->setStyleSheet("font-size: 90px; font-weight: 600;");
   main_layout->addWidget(title);
 
@@ -104,7 +104,7 @@ void TermsPage::showEvent(QShowEvent *event) {
   buttons->setSpacing(45);
   main_layout->addLayout(buttons);
 
-  QPushButton *decline_btn = new QPushButton("Decline");
+  QPushButton *decline_btn = new QPushButton("거부");
   buttons->addWidget(decline_btn);
   QObject::connect(decline_btn, &QPushButton::clicked, this, &TermsPage::declinedTerms);
 
@@ -123,7 +123,7 @@ void TermsPage::showEvent(QShowEvent *event) {
 }
 
 void TermsPage::enableAccept() {
-  accept_btn->setText("Agree");
+  accept_btn->setText("동의");
   accept_btn->setEnabled(true);
 }
 
