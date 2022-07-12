@@ -255,6 +255,6 @@ RichTextDialog::RichTextDialog(const QString &prompt_text, const QString &btn_te
 }
 
 bool RichTextDialog::alert(const QString &prompt_text, QWidget *parent) {
-  auto d = RichTextDialog(prompt_text, "Ok", parent);
+  auto d = RichTextDialog(prompt_text, "확인", parent);
   return d.exec();
 }
