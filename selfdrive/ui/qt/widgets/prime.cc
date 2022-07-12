@@ -227,20 +227,20 @@ SetupWidget::SetupWidget(QWidget* parent) : QFrame(parent) {
   finishRegistationLayout->setContentsMargins(30, 75, 30, 45);
   finishRegistationLayout->setSpacing(0);
 
-  QLabel* registrationTitle = new QLabel("Finish Setup");
+  QLabel* registrationTitle = new QLabel("설정 완료");
   registrationTitle->setStyleSheet("font-size: 75px; font-weight: bold; margin-left: 55px;");
   finishRegistationLayout->addWidget(registrationTitle);
 
   finishRegistationLayout->addSpacing(30);
 
-  QLabel* registrationDescription = new QLabel("Pair your device with comma connect (connect.comma.ai) and claim your comma prime offer.");
+  QLabel* registrationDescription = new QLabel("장치를 콤마 커넥트(connect.comma.ai)과 페어링하고 콤마 프라임 제안을 요청하십시오.");
   registrationDescription->setWordWrap(true);
   registrationDescription->setStyleSheet("font-size: 55px; font-weight: light; margin-left: 55px;");
   finishRegistationLayout->addWidget(registrationDescription);
 
   finishRegistationLayout->addStretch();
 
-  QPushButton* pair = new QPushButton("Pair device");
+  QPushButton* pair = new QPushButton("장치 페어링");
   pair->setFixedHeight(220);
   pair->setStyleSheet(R"(
     QPushButton {
