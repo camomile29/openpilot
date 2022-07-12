@@ -68,7 +68,7 @@ InputDialog::InputDialog(const QString &title, QWidget *parent, const QString &s
     vlayout->addWidget(sublabel, 1, Qt::AlignTop | Qt::AlignLeft);
   }
 
-  QPushButton* cancel_btn = new QPushButton("Cancel");
+  QPushButton* cancel_btn = new QPushButton("");
   cancel_btn->setFixedSize(386, 125);
   cancel_btn->setStyleSheet(R"(
     font-size: 48px;
@@ -165,7 +165,7 @@ void InputDialog::handleEnter() {
     done(QDialog::Accepted);
     emitText(line->text());
   } else {
-    setMessage("Need at least "+QString::number(minLength)+" characters!", false);
+    setMessage("최소 "+QString::number(minLength)+" 자가 필요합니다", false);
   }
 }
 
