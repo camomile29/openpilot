@@ -134,7 +134,7 @@ DevicePanel::DevicePanel(SettingsWindow *parent) : ListWidget(parent) {
   reset_calib_btn->setStyleSheet("height: 120px;border-radius: 15px;background-color: #393939;");
   reset_layout->addWidget(reset_calib_btn);
   QObject::connect(reset_calib_btn, &QPushButton::released, [=]() {
-    if (ConfirmationDialog::confirm("캘리브레이션과 라이브 파라미터가 재설정됩니다. 진행할까요?", this)) {
+    if (ConfirmationDialog::confirm("캘리브레이션과 라이브 파라미터(AngleOffset, SteerRatio등)이 재설정(초기화)됩니다. 진행할까요?", this)) {
       Params().remove("CalibrationParams");
       Params().remove("LiveParameters");
       emit closeSettings();
