@@ -708,7 +708,7 @@ CommunityPanel::CommunityPanel(QWidget* parent) : QWidget(parent) {
                                             this));*/
 
   toggles.append(new ParamControl("DisableOpFcw",
-                                            "Openpilot FCW를 ",
+                                            "Openpilot FCW를 끕니다",
                                             "",
                                             "../assets/offroad/icon_shell.png",
                                             this));
@@ -740,7 +740,7 @@ SelectCar::SelectCar(QWidget* parent): QWidget(parent) {
   main_layout->setSpacing(20);
 
   // Back button
-  QPushButton* back = new QPushButton("Back");
+  QPushButton* back = new QPushButton("뒤로");
   back->setObjectName("back_btn");
   back->setFixedSize(500, 100);
   connect(back, &QPushButton::clicked, [=]() { emit backPress(); });
