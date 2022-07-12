@@ -557,7 +557,7 @@ CommunityPanel::CommunityPanel(QWidget* parent) : QWidget(parent) {
 
   QString selected = QString::fromStdString(Params().get("SelectedCar"));
 
-  QPushButton* selectCarBtn = new QPushButton(selected.length() ? selected : "Select your car");
+  QPushButton* selectCarBtn = new QPushButton(selected.length() ? selected : "차량을 선택하세요");
   selectCarBtn->setObjectName("selectCarBtn");
   //selectCarBtn->setStyleSheet("margin-right: 30px;");
   //selectCarBtn->setFixedSize(350, 100);
@@ -577,7 +577,7 @@ CommunityPanel::CommunityPanel(QWidget* parent) : QWidget(parent) {
   connect(selectCar, &SelectCar::selectedCar, [=]() {
 
      QString selected = QString::fromStdString(Params().get("SelectedCar"));
-     selectCarBtn->setText(selected.length() ? selected : "Select your car");
+     selectCarBtn->setText(selected.length() ? selected : "차량을 선택하세요");
      main_layout->setCurrentWidget(homeScreen);
   });
   main_layout->addWidget(selectCar);
@@ -637,8 +637,8 @@ CommunityPanel::CommunityPanel(QWidget* parent) : QWidget(parent) {
   QList<ParamControl*> toggles;
 
   toggles.append(new ParamControl("UseClusterSpeed",
-                                            "Use Cluster Speed",
-                                            "Use cluster speed instead of wheel speed.",
+                                            "계기판속도 사용",
+                                            "휠속도 대신 계기판속도를 사용합니다.(휠속도 사용 추천)",
                                             "../assets/offroad/icon_road.png",
                                             this));
 
