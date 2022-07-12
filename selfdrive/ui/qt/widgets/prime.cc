@@ -83,16 +83,16 @@ PairingPopup::PairingPopup(QWidget *parent) : QDialogBase(parent) {
 
     vlayout->addSpacing(30);
 
-    QLabel *title = new QLabel("Pair your device to your comma account", this);
+    QLabel *title = new QLabel("콤마 커넥트와 기기를 페어링하세요", this);
     title->setStyleSheet("font-size: 75px; color: black;");
     title->setWordWrap(true);
     vlayout->addWidget(title);
 
     QLabel *instructions = new QLabel(R"(
       <ol type='1' style='margin-left: 15px;'>
-        <li style='margin-bottom: 50px;'>Go to https://connect.comma.ai on your phone</li>
-        <li style='margin-bottom: 50px;'>Click "add new device" and scan the QR code on the right</li>
-        <li style='margin-bottom: 50px;'>Bookmark connect.comma.ai to your home screen to use it like an app</li>
+        <li style='margin-bottom: 50px;'>폰에서 https://connect.comma.ai 로 접속하세요</li>
+        <li style='margin-bottom: 50px;'>add new device&quot; 를 클릭하고 오른쪽 QR코드를 스캔하세요</li>
+        <li style='margin-bottom: 50px;'>앱처럼 사용하려면 connect.comma.ai를 홈 화면 북마크에 추가하세요</li>
       </ol>
     )", this);
     instructions->setStyleSheet("font-size: 47px; font-weight: bold; color: black;");
@@ -120,13 +120,13 @@ PrimeUserWidget::PrimeUserWidget(QWidget* parent) : QWidget(parent) {
   primeLayout->setMargin(0);
   primeWidget->setContentsMargins(60, 50, 60, 50);
 
-  QLabel* subscribed = new QLabel("✓ SUBSCRIBED");
+  QLabel* subscribed = new QLabel("✓ 구독중");
   subscribed->setStyleSheet("font-size: 41px; font-weight: bold; color: #86FF4E;");
   primeLayout->addWidget(subscribed, 0, Qt::AlignTop);
 
   primeLayout->addSpacing(60);
 
-  QLabel* commaPrime = new QLabel("comma prime");
+  QLabel* commaPrime = new QLabel("콤마 프라임");
   commaPrime->setStyleSheet("font-size: 75px; font-weight: bold;");
   primeLayout->addWidget(commaPrime, 0, Qt::AlignTop);
 
@@ -145,7 +145,7 @@ PrimeUserWidget::PrimeUserWidget(QWidget* parent) : QWidget(parent) {
   pointsLayout->setMargin(0);
   pointsWidget->setContentsMargins(60, 50, 60, 50);
 
-  QLabel* commaPoints = new QLabel("COMMA POINTS");
+  QLabel* commaPoints = new QLabel("콤마 포인트");
   commaPoints->setStyleSheet("font-size: 41px; font-family: Inter SemiBold;");
   pointsLayout->addWidget(commaPoints, 0, Qt::AlignTop);
 
@@ -181,24 +181,24 @@ PrimeAdWidget::PrimeAdWidget(QWidget* parent) : QFrame(parent) {
   main_layout->setContentsMargins(80, 90, 80, 60);
   main_layout->setSpacing(0);
 
-  QLabel *upgrade = new QLabel("Upgrade Now");
+  QLabel *upgrade = new QLabel("지금 업그레이드");
   upgrade->setStyleSheet("font-size: 75px; font-weight: bold;");
   main_layout->addWidget(upgrade, 0, Qt::AlignTop);
   main_layout->addSpacing(50);
 
-  QLabel *description = new QLabel("Become a comma prime member at connect.comma.ai");
+  QLabel *description = new QLabel("connect.comma.ai에서 콤마 프라임 회원이 되십시오.");
   description->setStyleSheet("font-size: 60px; font-weight: light; color: white;");
   description->setWordWrap(true);
   main_layout->addWidget(description, 0, Qt::AlignTop);
 
   main_layout->addStretch();
 
-  QLabel *features = new QLabel("PRIME FEATURES:");
+  QLabel *features = new QLabel("프라임 기능");
   features->setStyleSheet("font-size: 41px; font-weight: bold; color: #E5E5E5;");
   main_layout->addWidget(features, 0, Qt::AlignBottom);
   main_layout->addSpacing(30);
 
-  QVector<QString> bullets = {"Remote access", "14 days of storage", "Developer perks"};
+  QVector<QString> bullets = {"원격 접속", "1년 저장공간", "개발자 특혜"};
   for (auto &b: bullets) {
     const QString check = "<b><font color='#465BEA'>✓</font></b> ";
     QLabel *l = new QLabel(check + b);
