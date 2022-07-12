@@ -638,7 +638,7 @@ CommunityPanel::CommunityPanel(QWidget* parent) : QWidget(parent) {
 
   toggles.append(new ParamControl("UseClusterSpeed",
                                             "계기판속도 사용",
-                                            "휠속도 대신 계기판속도를 사용합니다.(휠속도 사용 추천)",
+                                            "휠속도 대신 계기판속도를 사용합니다.",
                                             "../assets/offroad/icon_road.png",
                                             this));
 
