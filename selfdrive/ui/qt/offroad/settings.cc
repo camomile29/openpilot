@@ -437,7 +437,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
   )");
 
   // close button
-  QPushButton *close_btn = new QPushButton("← Back");
+  QPushButton *close_btn = new QPushButton("← 뒤로");
   close_btn->setStyleSheet(R"(
     QPushButton {
       font-size: 50px;
@@ -466,16 +466,16 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
   QObject::connect(device, &DevicePanel::closeSettings, this, &SettingsWindow::closeSettings);
 
   QList<QPair<QString, QWidget *>> panels = {
-    {"Device", device},
-    {"Network", network_panel(this)},
-    {"Toggles", new TogglesPanel(this)},
-    {"Software", new SoftwarePanel(this)},
-    {"Community", new CommunityPanel(this)},
+    {"장치", device},
+    {"네트워크", network_panel(this)},
+    {"토글", new TogglesPanel(this)},
+    {"소프트웨어", new SoftwarePanel(this)},
+    {"커뮤니티", new CommunityPanel(this)},
   };
 
 #ifdef ENABLE_MAPS
   auto map_panel = new MapPanel(this);
-  panels.push_back({"Navigation", map_panel});
+  panels.push_back({"내비게이션", map_panel});
   QObject::connect(map_panel, &MapPanel::closeSettings, this, &SettingsWindow::closeSettings);
 #endif
 
@@ -752,7 +752,7 @@ SelectCar::SelectCar(QWidget* parent): QWidget(parent) {
   QScroller::grabGesture(list->viewport(), QScroller::LeftMouseButtonGesture);
   list->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 
-  list->addItem("[ Not selected ]");
+  list->addItem("[ 선택 안함 ]");
 
   QStringList items = get_list("/data/params/d/SupportedCars");
   list->addItems(items);
